@@ -4,6 +4,7 @@ using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+
 namespace Code.Systems
 {
     public sealed class UserInputSystem : IEcsRunSystem, IEcsInitSystem
@@ -27,15 +28,17 @@ namespace Code.Systems
         {
             foreach (var i in _canvasFilter)
             {
-                ref var canvasComponent = ref _canvasFilter.Get1(i);
+                ref var inputComponent = ref _canvasFilter.Get1(i);
 
-                canvasComponent.clickResults.Clear();
+                inputComponent.clickResults.Clear();
+                inputComponent.isClicked = false;
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     _clickData.position = Input.mousePosition;
 
-                    canvasComponent.graphicRaycaster.Raycast(_clickData, canvasComponent.clickResults);
+                    inputComponent.isClicked = true;
+                    inputComponent.graphicRaycaster.Raycast(_clickData, inputComponent.clickResults);
                 }
             }
         }

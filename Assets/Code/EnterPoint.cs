@@ -1,3 +1,6 @@
+using Code.Configs;
+using Code.Providers;
+using Code.SharedData;
 using Code.Systems;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -5,51 +8,57 @@ using Voody.UniLeo;
 
 public class EnterPoint : MonoBehaviour
 {
+    [SerializeField] private CellsProvider cellsProvider;
+    [SerializeField] private MainConfigs _mainConfigs;
+
     private EcsWorld world;
-    private EcsSystems systems;
+    private EcsSystems initialSystems;
+    private EcsSystems runnableSystems;
+    private SharedConfig _sharedConfig;
+
+    private void Awake()
+    {
+        cellsProvider.Init();
+        _sharedConfig = new SharedConfig(_mainConfigs);
+    }
 
     private void Start()
     {
         world = new EcsWorld();
-        systems = new EcsSystems(world);
+        initialSystems = new EcsSystems(world);
+        runnableSystems = new EcsSystems(world);
 
         // для UniLeo, который помогает управлять содержимым компонентов из редактора
-        systems.ConvertScene();
+        runnableSystems.ConvertScene();
 
-        InitInjections();
-        InitOneFrames();
         InitSystems();
-
-        systems.Init();
     }
 
     private void Update()
     {
-        // вызов всех систем, единая точка входа из одного update
-        systems.Run();
-    }
-
-    private void InitInjections()
-    {
+        runnableSystems.Run();
     }
 
     private void InitSystems()
     {
-        systems
-            .Add(new UserInputSystem())
-            .Add(new CellsHandleClickSystem());
-    }
+        initialSystems
+            .Add(new CellsInitSystem())
+            .Init();
 
-    private void InitOneFrames()
-    {
+        runnableSystems
+            .Add(new UserInputSystem())
+            .Add(new CheckCellClickSystem())
+            .Add(new CellsHandleClickSystem())
+            .Inject(_sharedConfig)
+            .Init();
     }
 
     private void OnDestroy()
     {
-        if (systems == null) return;
+        if (runnableSystems == null) return;
 
-        systems.Destroy();
-        systems = null;
+        runnableSystems.Destroy();
+        runnableSystems = null;
         world.Destroy();
         world = null;
     }

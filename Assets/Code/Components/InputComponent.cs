@@ -9,7 +9,8 @@ namespace Code.Components
     public struct InputComponent
     {
         public GraphicRaycaster graphicRaycaster;
-        [NonSerialized]
-        public List<RaycastResult> clickResults;
+        [NonSerialized] public List<RaycastResult> clickResults;
+        [NonSerialized] public bool isClicked;
+        public int cellClickedId;
     }
 }
