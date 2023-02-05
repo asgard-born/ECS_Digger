@@ -16,6 +16,7 @@ public class EnterPoint : MonoBehaviour
     private EcsSystems initialSystems;
     private EcsSystems runnableSystems;
     private SharedState _sharedState;
+    private EcsSystems destroySystems;
 
     private void Awake()
     {
@@ -35,6 +36,7 @@ public class EnterPoint : MonoBehaviour
         world = new EcsWorld();
         initialSystems = new EcsSystems(world);
         runnableSystems = new EcsSystems(world);
+        destroySystems = new EcsSystems(world);
 
         // для UniLeo, который помогает управлять содержимым компонентов из редактора
         runnableSystems.ConvertScene();
@@ -73,7 +75,13 @@ public class EnterPoint : MonoBehaviour
         if (runnableSystems == null) return;
 
         runnableSystems.Destroy();
+        initialSystems.Destroy();
+        destroySystems.Destroy();
+
         runnableSystems = null;
+        initialSystems = null;
+        destroySystems = null;
+
         world.Destroy();
         world = null;
     }
