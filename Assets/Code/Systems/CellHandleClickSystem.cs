@@ -1,13 +1,14 @@
 ﻿using Code.Components;
+using Code.SharedData;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Code.Systems
 {
-    public class CheckCellClickSystem : IEcsRunSystem
+    public class CellHandleClickSystem : IEcsRunSystem
     {
         private EcsFilter<InputComponent> _checkingClickFilter = null;
+        private SharedState _sharedState;
 
         public void Run()
         {
@@ -15,16 +16,18 @@ namespace Code.Systems
             {
                 ref var inputComponent = ref _checkingClickFilter.Get1(i);
 
-                inputComponent.cellClickedId = 0;
+                inputComponent.cellClickedId = -1;
 
                 if (!inputComponent.isClicked) return;
 
-                foreach (RaycastResult result in inputComponent.clickResults)
+                foreach (var result in inputComponent.clickResults)
                 {
                     var uiElement = result.gameObject;
 
-                    inputComponent.cellClickedId = uiElement.transform.GetSiblingIndex() + 1;
-                    
+                    if (!uiElement.CompareTag(_sharedState.mainConfigs.cellTag)) return;
+
+                    inputComponent.cellClickedId = uiElement.transform.GetSiblingIndex();
+
                     Debug.Log(inputComponent.cellClickedId);
                 }
             }

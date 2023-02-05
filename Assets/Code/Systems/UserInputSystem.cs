@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Code.Components;
+using Code.SharedData;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 
 namespace Code.Systems
 {
@@ -11,6 +11,7 @@ namespace Code.Systems
     {
         private EcsFilter<InputComponent> _canvasFilter = null;
         private PointerEventData _clickData;
+        private SharedState _sharedState;
 
         public void Init()
         {
@@ -19,7 +20,6 @@ namespace Code.Systems
             foreach (var i in _canvasFilter)
             {
                 ref var canvasComponent = ref _canvasFilter.Get1(i);
-
                 canvasComponent.clickResults = new List<RaycastResult>();
             }
         }
@@ -38,7 +38,20 @@ namespace Code.Systems
                     _clickData.position = Input.mousePosition;
 
                     inputComponent.isClicked = true;
+                    inputComponent.isHolding = true;
                     inputComponent.graphicRaycaster.Raycast(_clickData, inputComponent.clickResults);
+                }
+
+                if (Input.GetMouseButtonUp(0))
+                {
+                    inputComponent.isHolding = false;
+                    inputComponent.isDragging = false;
+                    _clickData.position = Vector2.zero;
+
+                    if (_sharedState.isSpawningGold)
+                    {
+                        _sharedState.isSpawningGold = false;
+                    }
                 }
             }
         }

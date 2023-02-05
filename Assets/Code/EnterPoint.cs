@@ -10,16 +10,17 @@ public class EnterPoint : MonoBehaviour
 {
     [SerializeField] private CellsProvider cellsProvider;
     [SerializeField] private MainConfigs _mainConfigs;
+    [SerializeField] private Canvas _canvas;
 
     private EcsWorld world;
     private EcsSystems initialSystems;
     private EcsSystems runnableSystems;
-    private SharedConfig _sharedConfig;
+    private SharedState _sharedState;
 
     private void Awake()
     {
         cellsProvider.Init();
-        _sharedConfig = new SharedConfig(_mainConfigs);
+        _sharedState = new SharedState(_mainConfigs, _canvas);
     }
 
     private void Start()
@@ -47,9 +48,13 @@ public class EnterPoint : MonoBehaviour
 
         runnableSystems
             .Add(new UserInputSystem())
-            .Add(new CheckCellClickSystem())
-            .Add(new CellsHandleClickSystem())
-            .Inject(_sharedConfig)
+            .Add(new CellHandleClickSystem())
+            .Add(new GoldSpawningSystem())
+            .Add(new GoldHandleClickSystem())
+            .Add(new GoldDragSystem())
+            .Add(new LootingSystem())
+            .Add(new DrawUISystem())
+            .Inject(_sharedState)
             .Init();
     }
 

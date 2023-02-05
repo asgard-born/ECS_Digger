@@ -11,6 +11,8 @@ namespace Code.Components
         public GraphicRaycaster graphicRaycaster;
         [NonSerialized] public List<RaycastResult> clickResults;
         [NonSerialized] public bool isClicked;
-        public int cellClickedId;
+        [NonSerialized] public bool isHolding;
+        [NonSerialized] public bool isDragging;
+        [NonSerialized] public int cellClickedId;
     }
 }

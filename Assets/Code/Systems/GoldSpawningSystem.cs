@@ -1,22 +1,23 @@
 ﻿using Code.Components;
-using Code.Configs;
+using Code.Providers;
 using Code.SharedData;
 using Leopotam.Ecs;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Code.Systems
 {
-    public class CellsHandleClickSystem : IEcsRunSystem
+    public class GoldSpawningSystem : IEcsRunSystem
     {
         private EcsFilter<InputComponent> _inputFilter = null;
         private EcsFilter<CellComponent> _cellFilter = null;
-        private SharedConfig _sharedConfig;
+        private SharedState _sharedState;
 
         public void Run()
         {
             foreach (var i in _inputFilter)
             {
-                ref InputComponent inputComponent = ref _inputFilter.Get1(i);
+                ref var inputComponent = ref _inputFilter.Get1(i);
 
                 if (!inputComponent.isClicked) return;
 
@@ -27,6 +28,7 @@ namespace Code.Systems
                     if (inputComponent.cellClickedId == cellComponent.id)
                     {
                         HandleClick(cellComponent);
+                        inputComponent.cellClickedId = -1;
 
                         return;
                     }
@@ -36,12 +38,25 @@ namespace Code.Systems
 
         private void HandleClick(CellComponent cellComponent)
         {
-            if (cellComponent.hasGold) return;
+            if (_sharedState.cellsState[cellComponent.id].hasGold) return;
 
-            cellComponent.state++;
-            
-            var gold = Object.Instantiate(_sharedConfig.mainConfigs.goldPrefab, cellComponent.transform);
+            _sharedState.cellsState[cellComponent.id].state++;
+
+            if (true)
+            {
+                SpawnGold(cellComponent);
+            }
+        }
+
+        private void SpawnGold(CellComponent cellComponent)
+        {
+            _sharedState.isSpawningGold = true;
+
+            var gold = Object.Instantiate(_sharedState.mainConfigs.goldPrefab, cellComponent.transform);
+            gold.GetComponent<GoldProvider>().Init(cellComponent);
             gold.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+            _sharedState.cellsState[cellComponent.id].hasGold = true;
         }
     }
 }

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 168683485009899535}
   - component: {fileID: 168683485009899529}
   - component: {fileID: 168683485009899528}
+  - component: {fileID: 1710788062290747895}
+  - component: {fileID: 2301255639406221244}
   m_Layer: 5
   m_Name: Gold
   m_TagString: Untagged
@@ -75,3 +77,30 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1710788062290747895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168683485009899534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863c7f7460b2b49abb4fa9a7ff9cb180, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  convertMode: 0
+--- !u!114 &2301255639406221244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168683485009899534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05cb14017a4a4fd18bfd91e2e962561f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value:
+    rectTransform: {fileID: 0}

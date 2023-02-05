@@ -6,9 +6,7 @@ namespace Code.Components
     [Serializable]
     public struct CellComponent
     {
-        [NonSerialized] public int id;
-        [NonSerialized] public int state;
-        [NonSerialized] public bool hasGold;
-        [NonSerialized] public RectTransform transform;
+        public int id;
+        public RectTransform transform;
     }
 }

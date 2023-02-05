@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _goldPrefab: {fileID: 168683485009899534, guid: 966e681675760c043b25013526278276, type: 3}
   _goldPercent: 0.3
+  _gridSize: 10
+  _cellTag: Cell

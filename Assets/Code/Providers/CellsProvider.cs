@@ -8,11 +8,11 @@ namespace Code.Providers
     {
         public void Init()
         {
-            for (int i = 0; i < value.cells.Count; i++)
+            for (var i = 0; i < value.cells.Count; i++)
             {
                 var cell = value.cells[i];
                 var rectTransform = cell.GetComponent<RectTransform>();
-                cell.Init(i + 1, rectTransform);
+                cell.Init(i, rectTransform);
             }
         }
     }
