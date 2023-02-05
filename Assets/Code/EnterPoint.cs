@@ -20,7 +20,14 @@ public class EnterPoint : MonoBehaviour
     private void Awake()
     {
         cellsProvider.Init();
-        _sharedState = new SharedState(_mainConfigs, _canvas);
+
+        var context = new SharedState.Context
+        {
+            mainConfigs = _mainConfigs,
+            canvas = _canvas
+        };
+
+        _sharedState = new SharedState(context);
     }
 
     private void Start()
@@ -37,6 +44,8 @@ public class EnterPoint : MonoBehaviour
 
     private void Update()
     {
+        if (_sharedState.hasFinished) return;
+
         runnableSystems.Run();
     }
 
@@ -49,11 +58,12 @@ public class EnterPoint : MonoBehaviour
         runnableSystems
             .Add(new UserInputSystem())
             .Add(new CellHandleClickSystem())
-            .Add(new GoldSpawningSystem())
+            .Add(new DigSystem())
             .Add(new GoldHandleClickSystem())
             .Add(new GoldDragSystem())
             .Add(new LootingSystem())
             .Add(new DrawUISystem())
+            .Add(new CheckGameFinishSystem())
             .Inject(_sharedState)
             .Init();
     }

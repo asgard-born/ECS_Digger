@@ -1,5 +1,6 @@
 ﻿using Code.Components;
 using Code.SharedData;
+using Code.Tags;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Code.Systems
     public class GoldHandleClickSystem : IEcsRunSystem
     {
         private EcsFilter<InputComponent> _inputFilter = null;
-        private EcsFilter<GoldComponent> _goldFilter = null;
+        private EcsFilter<GoldComponent>.Exclude<HasDestroyedTag> _goldFilter = null;
         private SharedState _sharedState;
 
         public void Run()
@@ -29,7 +30,7 @@ namespace Code.Systems
                     if (goldComponent.rectTransform.rect.Contains(localMousePosition))
                     {
                         inputComponent.isDragging = true;
-                        _sharedState.draggingGold = goldComponent;
+                        goldComponent.isDragging = true;
                     }
                 }
             }

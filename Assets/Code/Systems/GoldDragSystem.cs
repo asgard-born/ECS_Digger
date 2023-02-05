@@ -17,16 +17,29 @@ namespace Code.Systems
             {
                 ref var inputComponent = ref _inputFilter.Get1(i);
 
-                if (inputComponent.isDragging)
+                foreach (var j in _goldFilter)
                 {
-                    Drag();
+                    ref var goldComponent = ref _goldFilter.Get1(j);
+
+                    if (goldComponent.isDragging)
+                    {
+                        if (inputComponent.isDragging)
+                        {
+                            Drag(ref goldComponent);
+                        }
+                        else
+                        {
+                            goldComponent.isDragging = false;
+                            _sharedState.releasedGoldId = goldComponent.id;
+                        }
+                    }
                 }
             }
         }
 
-        private void Drag()
+        private void Drag(ref GoldComponent goldComponent)
         {
-            var transform = _sharedState.draggingGold.transform;
+            var transform = goldComponent.transform;
             transform.parent = _sharedState.canvas.transform;
             transform.SetAsLastSibling();
             transform.position = Input.mousePosition;

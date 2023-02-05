@@ -2,7 +2,7 @@
 {
     public struct CellState
     {
-        public int state;
+        public int depthState;
         public bool hasGold;
     }
 }
